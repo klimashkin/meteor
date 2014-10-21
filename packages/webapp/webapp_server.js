@@ -567,10 +567,16 @@ var runWebAppServer = function () {
     var defaultOptionsForArch = {
       'web.cordova': {
         runtimeConfigOverrides: {
+          // XXX We use absoluteUrl() here so that we serve https://
+          // URLs to cordova clients if force-ssl is in use. This is
+          // kind of weird: it means that mobile clients will have a
+          // different ROOT_URL than browser clients. Not sure how else
+          // to get cordova clients to connect to https:// directly
+          // though.
           DDP_DEFAULT_CONNECTION_URL: process.env.MOBILE_DDP_URL ||
-            __meteor_runtime_config__.ROOT_URL,
+            Meteor.absoluteUrl(),
           ROOT_URL: process.env.MOBILE_ROOT_URL ||
-            __meteor_runtime_config__.ROOT_URL
+            Meteor.absoluteUrl()
         }
       }
     };
